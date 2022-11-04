@@ -1131,7 +1131,6 @@ def exluir_page2():
         return render_template("excluir.html", user_image = imagem, mensagem = "exluida com sucesso")            
 
 
-atual()
 linhabranca()   
 
 if __name__ == "__main__":

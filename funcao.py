@@ -259,7 +259,7 @@ def atual():
             del datas[a]
             z = z - 1
             a = a - 1
-        a = a + 1
+            a = a + 1
     
     caronas = pesquisa(datas, "sdfdfs")
     
