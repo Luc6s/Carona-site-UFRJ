@@ -35,8 +35,19 @@
             <hr class="observação" align="center">
 
             <h4 class="subtitulo">Ainda não se cadastrou?</h4>
-            <h4 class="subtitulo"><a href="http://127.0.0.1:5000/cadastro"  style="color: #FFD700">Clique aqui</a></h4>
-        
+            <h4 class="subtitulo"><a href="/cadastro"  style="color: #FFD700">Clique aqui</a></h4>
+            
+            <script>
+                var ativar = '{{ativar}}';
+                function funcao1()
+                {
+                alert(ativar);
+                }
+                if (ativar){
+                    funcao1()
+                }
+                    
+            </script>
         </main>
     </body>
 

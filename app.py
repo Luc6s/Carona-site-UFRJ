@@ -1,6 +1,6 @@
 # Importando biblioteca Flask
 from flask import Flask, render_template, request
-from funcao import *
+from funcaos import *
 from datetime import datetime
 import os
 
@@ -14,28 +14,28 @@ arq = open('registrado.txt', 'a')
 
 fotos = os.path.join('static', 'fotos')
 
-site = Flask(__name__)
+app = Flask(__name__)
 
-site.config['UPLOAD_FOLDER'] = fotos
+app.config['UPLOAD_FOLDER'] = fotos
 
 #todas as imagens usadas
-imagem = os.path.join(site.config['UPLOAD_FOLDER'], 'carona.png')
-meu_perfil = os.path.join(site.config['UPLOAD_FOLDER'], 'meu_perfil.png')
-receberfoto = os.path.join(site.config['UPLOAD_FOLDER'], 'receber.png')
-darfoto = os.path.join(site.config['UPLOAD_FOLDER'], 'dar.png')
-imagem_dados = os.path.join(site.config['UPLOAD_FOLDER'], 'imagem_dados.png')
-imagem_oferecidas = os.path.join(site.config['UPLOAD_FOLDER'], 'imagem_oferecidas.png')
-imagem_desejadas = os.path.join(site.config['UPLOAD_FOLDER'], 'imagem_desejadas.png')
+imagem = os.path.join(app.config['UPLOAD_FOLDER'], 'carona.png')
+meu_perfil = os.path.join(app.config['UPLOAD_FOLDER'], 'meu_perfil.png')
+receberfoto = os.path.join(app.config['UPLOAD_FOLDER'], 'receber.png')
+darfoto = os.path.join(app.config['UPLOAD_FOLDER'], 'dar.png')
+imagem_dados = os.path.join(app.config['UPLOAD_FOLDER'], 'imagem_dados.png')
+imagem_oferecidas = os.path.join(app.config['UPLOAD_FOLDER'], 'imagem_oferecidas.png')
+imagem_desejadas = os.path.join(app.config['UPLOAD_FOLDER'], 'imagem_desejadas.png')
 
 #renderiza pagina de login
-@site.route("/login")
-@site.route("/")
+@app.route("/login")
+@app.route("/")
 def loginpage():
     
     return render_template("pagina_login.html", user_image = imagem)
 
 #requisita as informações do login e as verifica
-@site.route("/login", methods =["POST"])
+@app.route("/login", methods =["POST"])
 def acesso():
     
     if request.method == "POST":
@@ -67,13 +67,13 @@ def acesso():
         return render_template("pagina_login_erro.html", user_image = imagem)
 
 #renderiza a pagina de cadastro
-@site.route("/cadastro")   
+@app.route("/cadastro")   
 def cadastrar():
     
     return render_template("pagina_cadastro.html", user_image = imagem) 
 
 #pega as informações da pagina de cadastro e as valida e depois as cadastro no arquivo texto
-@site.route("/cadastro", methods =["POST"]) 
+@app.route("/cadastro", methods =["POST"]) 
 def registre():
     
     if request.method == "POST":
@@ -152,7 +152,7 @@ def registre():
     arq = open('registrado.txt', 'a')
     arq.write(login)
     arq.close()
-    return render_template("pagina_login.html", user_image = imagem)    
+    return render_template("pagina_login.html", user_image = imagem, ativar = "Cadastro feito com sucesso")    
 
 #imprime os erros de cadastro
 def erros(erro):
@@ -160,7 +160,7 @@ def erros(erro):
     return render_template("pagina_cadastro.html", user_image = imagem, erro7 = erro)
 
 #renderize a pagina de menu
-@site.route("/menuinicial")
+@app.route("/menuinicial")
 def menu_inicial():
     atual()
     atual()
@@ -168,12 +168,12 @@ def menu_inicial():
     return render_template("menu_inicial.html", user_image = imagem, botao1 = meu_perfil, botao2 = darfoto, botao3 = receberfoto)
 
 #renderiza a pagina de dar carona
-@site.route("/darcarona")
+@app.route("/darcarona")
 def darcarona():
     return render_template("dar_carona.html", user_image = imagem)
 
 #pega as informações da pagina carona e as armazena no arquivo texto
-@site.route("/darcarona", methods = ['POST'])  
+@app.route("/darcarona", methods = ['POST'])  
 def dar1():
     
     try:
@@ -339,13 +339,13 @@ def errosdar(erro):
     return render_template("dar_carona.html", user_image = imagem, erro7 = erro)
 
 #renderiza a pagina de perfil
-@site.route("/meuperfil")
+@app.route("/meuperfil")
 def meuperfil(): 
     atual()
     return render_template("meu_perfil.html", user_image = imagem, botao1 = imagem_dados, botao2 = imagem_oferecidas, botao3 = imagem_desejadas)   
 
 #imprime todas as caronas já oferecidas pelo usuário
-@site.route("/caronasofereciadas")
+@app.route("/caronasofereciadas")
 def mostrar_oferecidas_page():
     
     try:
@@ -355,6 +355,7 @@ def mostrar_oferecidas_page():
     
     l = achar_minhas_caronas(usuario)
     del l[-1]
+    
     carona = l 
     x = len(carona)
     if l == []:
@@ -368,7 +369,7 @@ def mostrar_oferecidas_page():
     return render_template("mostrar_caronas_oferecidas.html", user_image = imagem, caronas = carona, maximo = x, mensagem = mensagem1)
 
 #requesita o numero da carona oferecida a ser excluida
-@site.route("/caronasofereciadas", methods =['POST'])
+@app.route("/caronasofereciadas", methods =['POST'])
 def mostrar_oferecidas():
     
     try:
@@ -477,14 +478,14 @@ def achar_minhas_caronas(usuario):
     return l
 
 #renderiza a pagina de receber carona
-@site.route("/recebercarona")
+@app.route("/recebercarona")
 def receberpage(): 
     tempo = datetime.now()
     mesAtual = tempo.month
     return render_template("receber_carona.html", user_image = imagem, minimomes = str(mesAtual))  
 
 #requesita as informações sobre receber carona
-@site.route("/recebercarona", methods =['POST'])
+@app.route("/recebercarona", methods =['POST'])
 def receber_carona():
     atual()
     atual()
@@ -715,7 +716,7 @@ def receber_carona():
         x2 = x2.strip()
         x2 = x2.strip("?")
         x[0] = x2
-        x = " / ".join(x)
+        x = " - ".join(x)
         l[r] = x
         
     for a in range(len(l)):
@@ -734,7 +735,7 @@ def erros_receber(erro):
     return render_template("receber_carona.html", user_image = imagem, erro7 = erro, minimomes = str(mesAtual))
 
 #renderiza as caronas pesquisadas
-@site.route("/pesquisacarona")
+@app.route("/pesquisacarona")
 def pesquisa_carona_page(carona):
     
     if carona != []:
@@ -750,7 +751,7 @@ def pesquisa_carona_page(carona):
     return render_template("mostrar_caronas_pesquisa.html", user_image = imagem, caronas = carona1, maximo = x, mensagem = resposta)
 
 #requesita o numero da carona pesquisada a ser vinculada pelo usuário
-@site.route("/pesquisacarona", methods =['POST'])
+@app.route("/pesquisacarona", methods =['POST'])
 def pesquisa_carona():
     
     try:
@@ -778,7 +779,7 @@ def pesquisa_carona():
     return render_template("mostrar_caronas_pesquisa.html", user_image = imagem, caronas = carona, maximo = x, erro7 = r)
 
 #renderiza a paginda de caronas vinculadas ao perfil
-@site.route("/caronasadicionadas")
+@app.route("/caronasadicionadas")
 def caronas_adicionadas_page():
     
     try:
@@ -853,7 +854,7 @@ def caronas_adicionadas_page():
     return render_template("mostrar_caronas_adicionadas.html", user_image = imagem, caronas = u, mensagem = mensagem1, maximo = x)
 
 #requesita o numero da carona  a ser excluida pelo usuário
-@site.route("/caronasadicionadas", methods =['POST'])
+@app.route("/caronasadicionadas", methods =['POST'])
 def caronas_adicionadas():
     
     try:
@@ -885,7 +886,7 @@ def caronas_adicionadas():
     return caronas_adicionadas_page()
 
 #renderiza a paginda que contem todas as informações do usuário
-@site.route("/meusdados")
+@app.route("/meusdados")
 def meus_dados():    
     
     try:
@@ -917,13 +918,13 @@ def meus_dados():
     return render_template("meus_dados.html", user_image = imagem, usuario1 = user, senha1 = senha,  email1 = email, dre1 = dre, telefone1 = telefone )
 
 #renderiza a paginda que edita todas as informações do usuário
-@site.route("/meusdadoseditar")
+@app.route("/meusdadoseditar")
 def meus_dados_editar_page():    
 
     return render_template("meus_dados_editar.html", user_image = imagem)
 
 #requesita as informações a serem editadas
-@site.route("/meusdadoseditar", methods =['POST'])
+@app.route("/meusdadoseditar", methods =['POST'])
 def meus_dados_editar(): 
     
     global datauser
@@ -1049,13 +1050,13 @@ def meus_dados_editar():
     return meus_dados()
 
 #renderiza a paginda e confirma a exclusão do perfil 
-@site.route("/excluir")
+@app.route("/excluir")
 def exluir_page():
     
     return render_template("excluir.html", user_image = imagem) 
 
 #renderiza a paginda que de confirmação de exclusão
-@site.route("/excluir", methods =['POST'])
+@app.route("/excluir", methods =['POST'])
 def exluir_page2():
     
     
@@ -1135,5 +1136,7 @@ def exluir_page2():
 atual()
 linhabranca()   
 
+
+
 if __name__ == "__main__":
-    site.run()
+    app.run()
