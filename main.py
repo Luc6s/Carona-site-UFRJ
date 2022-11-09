@@ -163,6 +163,7 @@ def erros(erro):
 @site.route("/menuinicial")
 def menu_inicial():
     atual()
+    atual()
     linhabranca() 
     return render_template("menu_inicial.html", user_image = imagem, botao1 = meu_perfil, botao2 = darfoto, botao3 = receberfoto)
 
@@ -340,6 +341,7 @@ def errosdar(erro):
 #renderiza a pagina de perfil
 @site.route("/meuperfil")
 def meuperfil(): 
+    atual()
     return render_template("meu_perfil.html", user_image = imagem, botao1 = imagem_dados, botao2 = imagem_oferecidas, botao3 = imagem_desejadas)   
 
 #imprime todas as caronas já oferecidas pelo usuário
@@ -484,7 +486,7 @@ def receberpage():
 #requesita as informações sobre receber carona
 @site.route("/recebercarona", methods =['POST'])
 def receber_carona():
-    
+    atual()
     atual()
     linhabranca() 
     try:
@@ -1130,7 +1132,7 @@ def exluir_page2():
         alterar_linha(z, "")
         return render_template("excluir.html", user_image = imagem, mensagem = "exluida com sucesso")            
 
-
+atual()
 linhabranca()   
 
 if __name__ == "__main__":

@@ -259,7 +259,7 @@ def atual():
             del datas[a]
             z = z - 1
             a = a - 1
-            a = a + 1
+        a = a + 1
     
     caronas = pesquisa(datas, "sdfdfs")
     
@@ -280,7 +280,10 @@ def atual():
             for g in k:
                 for t in datas:
                     if t in g:
-                        h.remove(g)
+                        try:
+                            h.remove(g)
+                        except:
+                            pass
             m = ""
             for j in h:
                 m = m + j + "+"
